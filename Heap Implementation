@@ -1,0 +1,79 @@
+Implement a Priority Queue using Heap Self Made
+
+Concept:-
+1) We always maintain a heap order , which is parent is less than both child     
+   and no cond. on child  which is smaller big 
+2) As it is a CBT , Complete Binary Tree , We can represent tree in vector  
+   And we have a index relationship bw parent & child 
+   idx of parent = pi
+   idx left child = 2*pi+1
+   idx Right child= 2*pi+2 
+   
+   & from child idx to parent idx 
+   idx of child any left/right= ci , then
+   idx of parent = (ci-1)/2
+
+Add - add at back then upheap(p.size()-1) 
+Remove - swap with back element , then pop_back , then downheap(idx=0)
+Peek - return p[0] - O(1)
+    
+#include<bits/stdc++.h> 
+using namespace std; 
+vector<int>p;
+
+void upheap(int ci){
+    if(ci==0)return;
+    int pi=(ci-1)/2;
+    if(p[pi]>p[ci]){
+        swap(p[pi],p[ci]);
+        upheap(pi);
+    }
+}
+void insert(int x){
+    p.push_back(x);
+    upheap(p.size()-1);
+}
+
+
+void downheap(int pi){
+    int mini=pi;
+    int lc=2*pi+1;
+    if(lc<p.size() && p[mini]>p[lc])mini=lc;
+    int rc=2*pi+2;
+    if(rc<p.size() && p[mini]>p[rc])mini=rc;
+    
+    if(mini!=pi){
+        swap(p[mini],p[pi]);
+        downheap(mini);
+    }
+    
+}
+int remove(){
+    if(p.size()==0)return -1;
+    int val=p[0];
+    swap(p[0],p[p.size()-1]);
+    p.pop_back();
+    downheap(0);
+    return val;
+}
+
+int peek(){
+    if(p.size()==0)return -1;
+    return p[0];
+}
+int size(){
+    return p.size();
+} 
+
+ 
+int main(){
+    insert(10);insert(20); insert(30); insert(110);
+    cout<<remove()<<endl;
+    cout<<remove()<<endl;
+    cout<<remove()<<endl;
+    insert(142);
+    cout<<remove()<<endl;
+    insert(2);
+    cout<<remove()<<endl;
+    return 0;
+} 
